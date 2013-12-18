@@ -1,0 +1,27 @@
+{
+  "name": "kafka-protocol",
+  "version": "0.0.0",
+  "description": "Read & Write kafka v0.8 binary",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/brianc/node-kafka-protocol.git"
+  },
+  "keywords": [
+    "kafka",
+    "protocol"
+  ],
+  "author": "Brian M. Carlson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brianc/node-kafka-protocol/issues"
+  },
+  "homepage": "https://github.com/brianc/node-kafka-protocol",
+  "devDependencies": {
+    "mocha": "~1.15.1",
+    "buffer-equal": "0.0.0"
+  }
+}
