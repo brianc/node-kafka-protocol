@@ -1,24 +1,12 @@
 var requests = require('../lib/requests')
 var MetadataRequest = requests.MetadataRequest
 
-var assert = require('assert')
-var bufferEqual = require('buffer-equal')
-
-assert.bufferEqual = function(actual, expected) {
-  if(!bufferEqual(actual, expected)) {
-    console.log('')
-    console.log('actual:   ', actual)
-    console.log('expected: ', expected)
-  }
-  assert(bufferEqual(actual, expected))
-}
-
 describe('writing', function() {
   describe('metadata-request', function() {
     it('writes correctly', function() {
       var req = new MetadataRequest('!', ['11'])
       var expected = [
-        0, 0, 0, 19, //length (does not include length byte)
+        0, 0, 0, 19, //length of the rest of the message, not including these bytes
         0, 3, //api key - 3 for meatdata request
         0, 0, //api version - 0 for v0.8
         0, 0, 0, 0, //correlationId
@@ -29,6 +17,18 @@ describe('writing', function() {
         0x31, 0x31, //'1' - the topic name
       ]
       assert.bufferEqual(req.toBuffer(), Buffer(expected))
+    })
+  })
+
+  describe('produce request', function() {
+    describe('single message', function() {
+      it('writes correctly', false, function() {
+        var requiredAcks = 1
+        var timeout = 2
+        var partition = 4
+        var topicName = 'test'
+        var req = new ProduceRequest()
+      })
     })
   })
 })
