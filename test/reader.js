@@ -26,14 +26,38 @@ describe('metdata response', function() {
     var res = Buffer([
                      0x00, 0x00, 0x00, 0x1c, //length
                      0x00, 0x00, 0x00, 0x09, //correlationId
-                     0x00, 0x00, 0x00, 0x00, //broker array length
-                     0x00, 0x00, 0x00, 0x01, //TopicMetadata array length
+                     0x00, 0x00, 0x00, 0x00, //broker array length (0)
+                     0x00, 0x00, 0x00, 0x01, //TopicMetadata array length (1)
                      0xff, 0xff, //TopicErrorCode
                      0x00, 0x08, 0x74, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x21, //topicName
                      0x00, 0x00, 0x00, 0x00]) //partitionMetadata array (0 length)
 
     assert.equal(res.readInt16BE(16), -1, 'should have -1 for invalid request error code')
     console.log(res.readInt16BE(16))
+  })
 
+  describe('simple single topic response', function() {
+    var res = Buffer([
+                     /*00*/ 0x00, 0x00, 0x00, 0x45, //length
+                     /*04*/ 0x00, 0x00, 0x00, 0x09, //correlationId
+                     /*08*/ 0x00, 0x00, 0x00, 0x01, //broker array length (1)
+                     /*12*/ 0x00, 0x00, 0x00, 0x00, //broker - nodeId (0)
+                     /*16*/ 0x00, 0x09, 0x6c, 0x6f, 0x63, 0x61, 0x6c, 0x68, 0x6f, 0x73, 0x74, // int16 of (9) + "localhost"
+                     /*27*/ 0x00, 0x00, 0x23, 0x84, //port - 9092
+                     0x00, 0x00, 0x00, 0x01, //TopicMetadata array length (1)
+                     0x00, 0x00, //TopicErorrCode
+                     //QUESTION - TopicName MISSING in protocol spec - https://cwiki.apache.org/confluence/display/KAFKA/A+Guide+To+The+Kafka+Protocol#AGuideToTheKafkaProtocol-MetadataResponse
+                     0x00, 0x04, //TopicName string length (4)
+                     0x74, 0x65, 0x73, 0x74, //TopicName string ("test" - (utf8))
+                     0x00, 0x00, 0x00, 0x01, //PartitionMetadata Array Length (1)
+                     0x00, 0x00, //PartitionErrorCode - (0) - no error
+                     0x00, 0x00, 0x00, 0x00, //PartitionId - (0)
+                     0x00, 0x00, 0x00, 0x00, //Leader (0)
+                     0x00, 0x00, 0x00, 0x01, //Replicas Array Length (1)
+                     0x00, 0x00, 0x00, 0x00, //Replica[0] id? (0)
+                     0x00, 0x00, 0x00, 0x01, //Isr length (1)
+                     0x00, 0x00, 0x00, 0x00 //The set subset (wtf) of the replicas that are "caught up" to the leader (0)
+    ]);
+    console.log(res.readInt32BE(27))
   })
 })

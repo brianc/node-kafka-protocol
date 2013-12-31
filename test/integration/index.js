@@ -48,7 +48,7 @@ describe('integration', function() {
           process.stdout.write(', ')
         }
       })
-      var req = new Metadata('br0ker', ['testing!'])
+      var req = new Metadata('br0ker', [])
       req.correlationId = 9
       client.send(req)
     }))
