@@ -19,16 +19,4 @@ describe('writing', function() {
       assert.bufferEqual(req.toBuffer(), Buffer(expected))
     })
   })
-
-  describe('produce request', function() {
-    describe('single message', function() {
-      it('writes correctly', false, function() {
-        var requiredAcks = 1
-        var timeout = 2
-        var partition = 4
-        var topicName = 'test'
-        var req = new ProduceRequest()
-      })
-    })
-  })
 })
