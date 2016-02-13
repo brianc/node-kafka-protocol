@@ -21,13 +21,17 @@
   },
   "homepage": "https://github.com/brianc/node-kafka-protocol",
   "devDependencies": {
-    "mocha": "~1.15.1",
+    "babel": "5.8.35",
+    "bluebird": "3.2.1",
     "buffer-equal": "0.0.0",
-    "okay": "~0.3.0"
+    "expect.js": "0.3.1",
+    "mocha": "2.4.5"
   },
   "dependencies": {
-    "crc32": "~0.2.2",
-    "buffer-crc32": "~0.2.1",
-    "packet-reader": "0.0.0"
+    "bignum": "0.11.0",
+    "buffer-writer": "1.0.0",
+    "crc-32": "0.4.0",
+    "lodash": "4.3.0",
+    "packet-reader": "0.2.0"
   }
 }

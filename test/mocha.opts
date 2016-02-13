@@ -1,1 +1,1 @@
--r ./test/helper.js
+--require test/setup.js
