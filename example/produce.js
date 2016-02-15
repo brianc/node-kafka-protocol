@@ -1,4 +1,4 @@
-import ProduceRequest from '../lib/produce-request'
+import ProduceRequest from '../lib/request/produce-request'
 import send from './send'
 
 const request = new ProduceRequest()

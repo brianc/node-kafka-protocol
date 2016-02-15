@@ -1,6 +1,5 @@
 import expect from 'expect.js'
-import ProduceRequest, { group } from '../lib/request/produce-request'
-import { dump } from '../example/send'
+import ProduceRequest from '../lib/request/produce-request'
 
 describe('writing', function() {
   describe('produce-request', function() {

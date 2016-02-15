@@ -1,5 +1,6 @@
 import { connect } from 'net'
 import Parser from '../lib/parse-stream'
+import Promise from 'bluebird'
 
 export const dump = buffer => {
   const arr = []
@@ -20,27 +21,32 @@ export const dump = buffer => {
 
 export default (message, cb) => {
   const opts = { host: 'localhost', port: 9092 }
-  const socket = connect(opts, () => {
-    console.log('connected to', opts)
+  return new Promise((resolve, reject) => {
+    const socket = connect(opts, () => {
+      console.log('connected to', opts)
 
-    socket.on('data', buff => {
-      console.log('socket data')
+      socket.on('data', buff => {
+        console.log('socket data')
+        if (process.env.DEBUG) {
+          dump(buff)
+        }
+      })
+
       if (process.env.DEBUG) {
-        dump(buff)
+        console.log('sending message: CID', message.correlationId)
+        dump(message.toBuffer())
       }
-    })
+      socket.write(message.toBuffer())
 
-    if (process.env.DEBUG) {
-      console.log('sending message: CID', message.correlationId)
-      dump(message.toBuffer())
-    }
-    socket.write(message.toBuffer())
+      const parser = new Parser()
 
-    const parser = new Parser()
-
-    socket.pipe(parser).on('data', data => {
-      cb(null, data)
-      socket.end()
+      socket.pipe(parser).on('data', data => {
+        if (cb) {
+          cb(null, data)
+        }
+        resolve(data)
+        socket.end()
+      })
     })
   })
 }
