@@ -1,5 +1,6 @@
 import expect from 'expect.js'
 import parse from './parse'
+import { dump } from '../example/send'
 
 describe('parse', function() {
   describe('fetch-response', () => {
@@ -101,7 +102,7 @@ describe('parse', function() {
 
     it('parses message-set', async () => {
       const buff = Buffer([
-        0x00, 0x00, 0x00, 53, //length (53)
+        0x00, 0x00, 0x00, 65, //length (65)
         0x00, 0x00, 0x00, 0x09, //correlationId (7)
         0x00, 0x00, 0x00, 0x01, //length of topic array (1)
 
@@ -114,12 +115,12 @@ describe('parse', function() {
           0x00, 0x00, 0x00, 0x00, //partition id (0)
           0x00, 0x01, //errorCode (1)
           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, //highwatermark offset (1) - string
-          0x00, 0x00, 0x00, 20, //messageset size (20 bytes)
+          0x00, 0x00, 0x00, 32, //messageset size (32 bytes)
 
           //message set
           //message 0
           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, //offset (1)
-          0x00, 0x00, 0x00, 0x10, //message size (16)
+          0x00, 0x00, 0x00, 0x10, //message size (20)
           0x00, 0x00, 0x00, 0x00, //crc32 (0)
           0x00, //magic byte
           0x00, //attributes,
@@ -145,8 +146,16 @@ describe('parse', function() {
         errorCode: 1,
         highwaterMarkOffset: '2',
         messageSet: {
-          size: 20,
-          messages: ['todo - implement me']
+          size: 32,
+          messages: [{
+            offset: '1',
+            size: 16,
+            crc: 0,
+            magicByte: 0,
+            attributes: 0,
+            key: null,
+            value: Buffer([0x21, 0x21, 0x22, 0x22, 0x23, 0x23])
+          }]
         }
       })
     })
