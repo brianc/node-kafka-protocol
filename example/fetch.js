@@ -1,5 +1,5 @@
 import FetchRequest from '../lib/request/fetch-request'
-import send from './send'
+import send, { dump } from './send'
 
 const fetch = async (topic, offset = 0) => {
   const req = new FetchRequest()
@@ -9,8 +9,19 @@ const fetch = async (topic, offset = 0) => {
   req.add(topic, 1, offset, maxBytes)
 
   const response = await send(req)
-  console.log('response', response)
+  console.log(req._topics[0])
+  const msg = response.readFetchResponse()
+  console.log()
+  console.log('--response--')
+  console.log()
+  console.log(msg.topics[0])
+  console.log(msg.topics[0].partitions[0].messageSet)
+
+  dump(response._buffer)
 }
 
-fetch('test').then(x => console.log('done?'))
+
+const topic = process.argv[3]
+const offset = process.argv[4]
+fetch(topic, offset).then(x => console.log('done?'))
   .catch(e => setImmediate(() => { throw e; }))

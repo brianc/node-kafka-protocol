@@ -1,4 +1,4 @@
-import MetadataRequest from '../lib/metadata-request'
+import MetadataRequest from '../lib/request/metadata-request'
 import send from './send'
 
 send(new MetadataRequest(), (err, res) => {
