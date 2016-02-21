@@ -1,4 +1,6 @@
 import expect from 'expect.js'
+import bignum from 'bignum'
+
 import Client from '../../lib/client'
 import { MetadataRequest } from '../../lib/request'
 import {
@@ -65,13 +67,21 @@ describe('client', () => {
     const key = Buffer('testing', 'utf8')
     const value = Buffer('this is the song that never ends', 'utf8')
 
-    //produce the message
+    //produce a message
     const res = await this.client.produce(TOPIC, PARTITION, key, value)
     expect(res).to.be.a(ProduceResponse)
     expect(res.topics).to.have.length(1)
     const [top] = res.topics
     expect(top.partitions).to.have.length(1)
     const offset = top.partitions[0].offset
+
+    //check the offset metadata
+    const offsets = await this.client.offset(TOPIC, PARTITION, -1)
+    console.log(JSON.stringify(offsets))
+    expect(offsets.topics).to.have.length(1)
+    expect(offsets.topics[0].name).to.be(TOPIC)
+    expect(offsets.topics[0].partitions).to.have.length(1)
+    expect(offsets.topics[0].partitions[0].offsets).to.eql([bignum(offset).add(1).toString()])
 
     //fetch the last produced message
     const fetch = await this.client.fetch(TOPIC, PARTITION, offset)
